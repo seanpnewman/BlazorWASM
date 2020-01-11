@@ -1,0 +1,33 @@
+﻿@page "/"
+@inject HttpClient Http
+@using System.Net
+@using System.IO
+@using BlazorWASMproj.Shared.Models
+
+<span>@message</span>
+
+<button @onclick="@DoGet">Click to do HTTP GET</button>
+
+@code
+{
+
+    public string message { get; set; } = "";
+
+    public List<Configurator> confs;
+
+    private async void DoGet()
+    {
+        try
+        {
+            confs = await Http.GetJsonAsync<List<Configurator>>("Configurator");
+            message = "success";
+        }
+        catch (Exception e)
+        {
+            message = e.InnerException.ToString();
+        }
+
+        StateHasChanged();
+    }
+
+}
